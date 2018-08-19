@@ -28,6 +28,7 @@ public class Cbip70 {
 
 public static void main( String[] args )
 {
+	BriefLogFormatter.init(); //logging verbosity BriefLogFormatter.initVerbose();
 	//create/load a wallet
 	WalletAppKit kit = new WalletAppKit(params, new File("."), "walletappkit");
 	//kit.connectToLocalHost();
@@ -46,6 +47,10 @@ public static void main( String[] args )
 		else
 
 			sendPaymentRequest(url, kit); 
+
+   log.info("Stopping ...");
+    appKit.stopAsync();
+    appKit.awaitTerminated();
 }
 
 private static void sendPaymentRequest(String location, WalletAppKit k) {
@@ -98,8 +103,8 @@ try {
 
 if (identity != null) {
 
-	log.info("Payment requestor: " + identity.displayName);
-	log.info("Certificat authority: " + identity.rootAuthorityName);
+	log.info("Payment requester: " + identity.displayName);
+	log.info("Certificate authority: " + identity.rootAuthorityName);
 
 }
 

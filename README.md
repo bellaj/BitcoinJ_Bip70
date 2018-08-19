@@ -1,8 +1,0 @@
-# BitcoinJ payment client
-
-
-
-
- 
-
-
