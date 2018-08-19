@@ -10,6 +10,7 @@ import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.protocols.payments.PaymentProtocol;
 import org.bitcoinj.protocols.payments.PaymentSession;
 import org.bitcoinj.uri.BitcoinURI;
+import org.bitcoinj.utils.BriefLogFormatter;
 import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.Wallet;
 import org.slf4j.Logger;
@@ -40,17 +41,15 @@ public static void main( String[] args )
 
 
 	String url ="bitcoin:mhc5YipxN6GhRRXtgakRBjrNUCbz6ypg66?amount=0.00888888&message=payment%20request&r=http://bip70.com:3000/request?amount=888888";
-	 if(Float.parseFloat(String.valueOf(kit.wallet().getBalance()))==0.0)
+	
+	if(Float.parseFloat(String.valueOf(kit.wallet().getBalance()))==0.0)
+		log.warn("Please send some testnet Bitcoins to your address "+kit.wallet().currentReceiveAddress());
 
-		     log.warn("Please send some testnet Bitcoins to your address "+kit.wallet().currentReceiveAddress());
+	else sendPaymentRequest(url, kit); 
 
-		else
-
-			sendPaymentRequest(url, kit); 
-
-   log.info("Stopping ...");
-    appKit.stopAsync();
-    appKit.awaitTerminated();
+    log.info("Stopping ...");
+    kit.stopAsync();
+    kit.awaitTerminated();
 }
 
 private static void sendPaymentRequest(String location, WalletAppKit k) {
@@ -98,7 +97,7 @@ try {
 	log.info("Payment Request");
 	log.info("Amount to Pay: " + session.getValue().toFriendlyString());
 	log.info("Date: " + session.getDate());
-	log.info("Memo: " + session.getMemo());
+	log.info("Message from merchant: " + session.getMemo());
 	PaymentProtocol.PkiVerificationData identity = session.verifyPki();
 
 if (identity != null) {
